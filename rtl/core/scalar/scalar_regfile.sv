@@ -2,25 +2,31 @@ import qtpa_pkg::*;
 
 module scalar_regfile (
     input  logic                  clk,
-    input  logic                  rst_n, // Synchronous active-high reset per your spec, or active-low depending on your preference
+    input  logic                  rst_n,
 
-    // Read Port 1 (Ss1)
+    // Read Port 1 (Rs1)
     input  logic [3:0]            rs1_addr,
     output logic [DATA_WIDTH-1:0] rs1_data,
 
-    // Read Port 2 (Ss2)
+    // Read Port 2 (Rs2)
     input  logic [3:0]            rs2_addr,
     output logic [DATA_WIDTH-1:0] rs2_data,
 
-    // Write Port (Sd)
+    // Write Port (Rd)
     input  logic                  we,      // Write Enable
     input  logic [3:0]            rd_addr, // Destination address
     input  logic [DATA_WIDTH-1:0] rd_data, // Data to write
 
-    // Dedicated Status Register Output (S15)
+    // Flag inputs to update S15 status register
+    input  logic                  flag_zero,
+    input  logic                  flag_carry,
+    input  logic                  flag_ovf,
+    input  logic                  flag_we,  // Flag write enable
+
+    // Status register output
     output logic [DATA_WIDTH-1:0] status_reg_out
 );
-    logic [DATA_WIDTH:0]  regfile [15:0]; // 16 registers, each 32 bits wide
+    logic [DATA_WIDTH-1:0]  regfile [15:0]; // 16 registers, each 32 bits wide
 
     always_ff @(posedge clk) begin : write
         if (!rst_n) begin
@@ -28,10 +34,16 @@ module scalar_regfile (
             for (int i = 0; i < 16; i++) begin
                 regfile[i] <= 'b0;
             end
-        end else if (we) begin
-            // Write to the register file if write enable is high and not writing to S0_IDX
-            if (rd_addr != S0_IDX) begin
+        end else begin
+            // Write to the register file if write enable is high
+            if (we && rd_addr != S0_IDX) begin
                 regfile[rd_addr] <= rd_data;
+            end
+            // Update S15 flags independently
+            if (flag_we) begin
+                regfile[S15_IDX][FLAG_ZERO]  <= flag_zero;
+                regfile[S15_IDX][FLAG_OVF]   <= flag_ovf;
+                regfile[S15_IDX][FLAG_CARRY] <= flag_carry;
             end
         end
     end

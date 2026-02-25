@@ -44,6 +44,10 @@ module scalar_core (
     logic [DATA_WIDTH-1:0] wb_alu_result;
     logic [3:0]            wb_rd_addr;
     logic                  wb_we;
+    logic                  wb_flag_zero, wb_flag_carry, wb_flag_ovf;
+
+    // execute stage flag wires
+    logic                  ex_flag_zero, ex_flag_carry, ex_flag_ovf;
 
     // forwarding wires
     logic [DATA_WIDTH-1:0] fwd_rs1_data;
@@ -64,6 +68,10 @@ module scalar_core (
         .we             (wb_we),
         .rd_addr        (wb_rd_addr),
         .rd_data        (wb_alu_result),
+        .flag_zero      (wb_flag_zero),
+        .flag_carry     (wb_flag_carry),
+        .flag_ovf       (wb_flag_ovf),
+        .flag_we        (wb_we),  // Update flags whenever we write to register
         .status_reg_out (status_out)
     );
 
@@ -143,16 +151,22 @@ module scalar_core (
     );
 
     pipe_reg_ex_wb pr_ex_wb (
-        .clk          (clk),
-        .rst          (!rst_n),
-        .stall        (1'b0), // Fixed for Phase 1
-        .flush        (1'b0), // Fixed for Phase 1
-        .ex_alu_result (alu_result),
-        .ex_rd_addr    (ex_rd_addr),
-        .ex_we         (ex_we),
-        .wb_alu_result (wb_alu_result),
-        .wb_rd_addr    (wb_rd_addr),
-        .wb_we         (wb_we)
+        .clk             (clk),
+        .rst             (!rst_n),
+        .stall           (1'b0), // Fixed for Phase 1
+        .flush           (1'b0), // Fixed for Phase 1
+        .ex_alu_result   (alu_result),
+        .ex_rd_addr      (ex_rd_addr),
+        .ex_we           (ex_we),
+        .ex_flag_zero    (f_zero),
+        .ex_flag_carry   (f_carry),
+        .ex_flag_ovf     (f_ovf),
+        .wb_alu_result   (wb_alu_result),
+        .wb_rd_addr      (wb_rd_addr),
+        .wb_we           (wb_we),
+        .wb_flag_zero    (wb_flag_zero),
+        .wb_flag_carry   (wb_flag_carry),
+        .wb_flag_ovf     (wb_flag_ovf)
     );
 
     always_comb begin : forwarding_logic
