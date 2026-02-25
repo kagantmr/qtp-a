@@ -1,8 +1,7 @@
 # ============================================================================
-# Makefile for Scalar Core Testbench
+# Makefile for QTPS Core Testbench
 # ============================================================================
-# Supports multiple simulators: VCS, MODELSIM, XCELIUM
-# Default: VCS
+# Supports Verilator simulator with FST waveform tracing
 # ============================================================================
 
 # Project structure
@@ -10,7 +9,7 @@ ROOT_DIR     := $(dir $(abspath $(firstword $(MAKEFILE_LIST))))
 RTL_DIR      := $(ROOT_DIR)rtl
 TB_DIR       := $(ROOT_DIR)tb
 PKG_DIR      := $(RTL_DIR)/pkg
-CORE_DIR     := $(RTL_DIR)/core/scalar
+CORE_DIR     := $(RTL_DIR)/core/qtps
 SIM_DIR      := $(ROOT_DIR)sim
 WAVES_DIR    := $(SIM_DIR)/waves
 SCRIPTS_DIR  := $(ROOT_DIR)scripts
@@ -29,14 +28,14 @@ VERBOSE      ?= 0
 
 # Common source files
 SV_FILES     := $(PKG_DIR)/qtpa_pkg.sv \
-                $(CORE_DIR)/scalar_alu.sv \
-                $(CORE_DIR)/scalar_regfile.sv \
-                $(CORE_DIR)/scalar_decode_unit.sv \
+                $(CORE_DIR)/qtps_alu.sv \
+                $(CORE_DIR)/qtps_regfile.sv \
+                $(CORE_DIR)/qtps_decode_unit.sv \
                 $(CORE_DIR)/pipe_reg_dec_iss.sv \
                 $(CORE_DIR)/pipe_reg_iss_ex.sv \
                 $(CORE_DIR)/pipe_reg_ex_wb.sv \
-                $(CORE_DIR)/scalar_core.sv \
-                $(TB_DIR)/scalar_core_tb.sv
+                $(CORE_DIR)/qtps_core.sv \
+                $(TB_DIR)/qtps_core_tb.sv
 
 # Verilator options
 VERILATOR_OPTS := --cc \
@@ -49,7 +48,7 @@ VERILATOR_OPTS := --cc \
                   -Wno-WIDTHTRUNC \
                   -Wno-WIDTHEXPAND \
                   -Wno-LATCH \
-                  --top-module scalar_core_tb \
+                  --top-module qtps_core_tb \
                   --timescale 1ns/1ps
 
 # Simulation time (can be overridden)
@@ -65,7 +64,7 @@ all: clean create-dirs asm check-memory compile simulate
 
 help:
 	@echo "=========================================="
-	@echo "Scalar Core Testbench Makefile"
+	@echo "QTPS Core Testbench Makefile"
 	@echo "=========================================="
 	@echo "Usage: make [target] [ASSEMBLY_FILE=file.asm] [MEMORY_FILE=file.mem]"
 	@echo ""
@@ -133,10 +132,10 @@ compile: check-memory
 	@echo "RTL files:"
 	@for file in $(SV_FILES); do echo "  - $$file"; done
 	@echo ""
-	@cp tb/scalar_core_tb.cpp sim/
-	@cd $(SIM_DIR) && verilator $(VERILATOR_OPTS) $(SV_FILES) --exe scalar_core_tb.cpp && make -C obj_dir -f Vscalar_core_tb.mk
+	@cp tb/qtps_core_tb.cpp sim/
+	@cd $(SIM_DIR) && verilator $(VERILATOR_OPTS) $(SV_FILES) --exe qtps_core_tb.cpp && make -C obj_dir -f Vqtps_core_tb.mk
 	@echo "[OK] Compilation complete"
-	@ls -lh $(SIM_DIR)/obj_dir/Vscalar_core_tb 2>/dev/null || echo "  (executable built in sim/obj_dir/)"
+	@ls -lh $(SIM_DIR)/obj_dir/Vqtps_core_tb 2>/dev/null || echo "  (executable built in sim/obj_dir/)"
 
 simulate: 
 	@echo ""
@@ -144,7 +143,7 @@ simulate:
 	@echo "Memory file: $(MEMORY_PATH)"
 	@echo "Waveform output: $(WAVES_DIR)/scalar_core.fst"
 	@echo ""
-	@cd $(SIM_DIR) && ./obj_dir/Vscalar_core_tb +verilator+rand_reset+2 || true
+	@cd $(SIM_DIR) && ./obj_dir/Vqtps_core_tb +verilator+rand_reset+2 || true
 	@echo "[OK] Simulation complete"
 	@echo "Waveform file generated: $(WAVES_DIR)/scalar_core.fst"
 
