@@ -1,4 +1,6 @@
-# QTPS Core Testbench & Simulator
+# QSP-A Core Testbench & Simulator
+
+**Queued SIMD Processor** (QSP-A)
 
 ## Overview
 
@@ -15,11 +17,11 @@
 ## Project Structure
 
 ```
-qtp-a/
+qsp-a/
 ├── rtl/
 │   ├── pkg/           # Package definitions
 │   ├── core/
-│   │   └── qtps/      # QTPS core modules
+│   │   └── qsp/       # QSP core modules
 │   └── dma/           # DMA controller
 ├── tb/                # Testbenches
 ├── scripts/           # Assembly language toolchain
@@ -79,7 +81,7 @@ Build the Verilator executable without running simulation:
 make compile
 ```
 
-Executable: `sim/obj_dir/Vqtps_core_tb`
+Executable: `sim/obj_dir/Vqsp_core_tb`
 
 ### 5. View Waveforms
 

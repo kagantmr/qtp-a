@@ -1,6 +1,6 @@
-import qtpa_pkg::*;
+import qspa_pkg::*;
 
-module qtps_alu (
+module qsp_alu (
     // Control
     input  op_t                alu_op, // The decoded operation from the enum
 

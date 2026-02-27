@@ -1,6 +1,6 @@
-import qtpa_pkg::*;
+import qspa_pkg::*;
 
-module qtps_core (
+module qsp_core (
     input  logic         clk,
     input  logic         rst_n,
 
@@ -57,8 +57,8 @@ module qtps_core (
     assign alu_op2_final = ex_use_imm ? ex_imm_ext : fwd_rs2_data;
 
 
-    // QTPS REGISTER FILE
-    qtps_regfile regfile_inst (
+    // QSP REGISTER FILE
+    qsp_regfile regfile_inst (
         .clk            (clk),
         .rst_n          (rst_n),
         .rs1_addr       (dec_rs1_addr),
@@ -75,8 +75,8 @@ module qtps_core (
         .status_reg_out (status_out)
     );
 
-    // QTPS DECODE
-    qtps_decode decode_inst (
+    // QSP DECODE
+    qsp_decode decode_inst (
         .instruction (instruction),
         .rs1_addr    (dec_rs1_addr),
         .rs2_addr    (dec_rs2_addr),
@@ -140,7 +140,7 @@ module qtps_core (
         .ex_rs2_addr  (ex_rs2_addr)
     );
 
-    qtps_alu alu_inst (
+    qsp_alu alu_inst (
         .alu_op       (ex_alu_op),
         .op1      (fwd_rs1_data),
         .op2      (alu_op2_final),

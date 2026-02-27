@@ -1,6 +1,6 @@
-import qtpa_pkg::*;
+import qspa_pkg::*;
 
-module qtps_regfile (
+module qsp_regfile (
     input  logic                  clk,
     input  logic                  rst_n,
 

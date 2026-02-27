@@ -1,6 +1,6 @@
-import qtpa_pkg::*;
+import qspa_pkg::*;
 
-module qtps_decode (
+module qsp_decode (
     // Input from IQ0
     input  logic [INSTRUCTION_WIDTH-1:0] instruction,
 

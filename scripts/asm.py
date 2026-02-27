@@ -72,7 +72,7 @@ def assemble_line(line, line_num):
         sys.exit(1)
 
 def main():
-    parser = argparse.ArgumentParser(description='QTP-A assembler')
+    parser = argparse.ArgumentParser(description='QSP-A assembler')
     parser.add_argument('input', help='Input assembly file (.asm)')
     parser.add_argument('-o', '--output', default='memory.mem', help='Output hex file (default: memory.mem)')
     

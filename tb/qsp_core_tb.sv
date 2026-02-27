@@ -1,6 +1,6 @@
-import qtpa_pkg::*;
+import qspa_pkg::*;
 
-module qtps_core_tb (
+module qsp_core_tb (
     input  logic         clk,
     input  logic         rst_n,
     input  logic [31:0]  instruction,
@@ -8,8 +8,8 @@ module qtps_core_tb (
     output logic         illegal
 );
 
-    // Instantiate QTPS core
-    qtps_core dut (
+    // Instantiate QSP core
+    qsp_core dut (
         .clk           (clk),
         .rst_n         (rst_n),
         .instruction   (instruction),

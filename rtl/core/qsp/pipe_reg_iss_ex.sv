@@ -1,4 +1,4 @@
-import qtpa_pkg::*;
+import qspa_pkg::*;
 
 module pipe_reg_iss_ex (
     input  logic                  clk,

@@ -1,4 +1,4 @@
-package qtpa_pkg;
+package qspa_pkg;
   parameter INSTRUCTION_WIDTH = 32;
   parameter DATA_WIDTH = 32;
 

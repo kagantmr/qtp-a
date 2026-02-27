@@ -1,5 +1,5 @@
 #include <verilated.h>
-#include "Vqtps_core_tb.h"
+#include "Vqsp_core_tb.h"
 #include <fstream>
 #include <vector>
 #include <iomanip>
@@ -9,7 +9,7 @@
 // For FST tracing
 #include <verilated_fst_c.h>
 
-Vqtps_core_tb* top = NULL;
+Vqsp_core_tb* top = NULL;
 VerilatedFstC* tfp = NULL;
 uint64_t sim_time = 0;
 
@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
     Verilated::traceEverOn(true);
     
     // Create top module instance
-    top = new Vqtps_core_tb;
+    top = new Vqsp_core_tb;
     
     // Open FST trace file
     tfp = new VerilatedFstC;
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     }
     
     // Reset sequence
-    std::cout << "Starting QTPS core simulation" << std::endl;
+    std::cout << "Starting QSP core simulation" << std::endl;
     std::cout << "Total instructions loaded: " << instruction_mem.size() << std::endl;
     std::cout << std::endl;
     
